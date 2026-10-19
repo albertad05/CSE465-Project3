@@ -1,5 +1,8 @@
 % p3.pl
-% *-> ADD ALL RESPONSIBILITIES IN DETAIL HERE <-*
+% Ron Antwi -- #1, #10
+% AJ Marin -- #2, #9
+% Leah Johnston -- #3, #4, #8
+% Andrew Albert -- #5, #6, #7
 
 % ------------------- PART ONE ---------------------
 % #1 (Undergraduate/Graduate) (5/5 pts)
