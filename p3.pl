@@ -24,6 +24,15 @@
 % #3 (Undergraduate/Graduate) (5/5 pts)
 % Count how many times a number appears in a list of integers.
 % count_occurrences(Lst, Num, Count).
+count_occurrences([], _, 0).
+
+count_occurrences([X|Rest], X, Count) :- 
+    count_occurrences(Rest, X, NewCount),
+    Count is NewCount + 1.
+
+count_occurrences([F|Rest], X, Count) :-
+    F \== X,
+    count_occurrences(Rest, X, Count).
 
 % count_occurrences([1, 2, 3, 2, 2, 4], 2, Count). -> Count = 3
 % count_occurrences([5, 5, 5], 5, Count). -> Count = 3
@@ -31,6 +40,12 @@
 % #4 (Undergraduate/Graduate) (5/5 pts)
 % Determine the summation of a list of integer numbers.
 % sum_lst(Lst, Sum).
+
+sum_lst([], 0).
+
+sum_lst([F|Rest], Sum) :-
+    sum_lst(Rest, NewSum),
+    Sum is NewSum + F.
 
 % sum_lst([1, 2, 3, 4], Sum). -> Sum = 10
 % sum_lst([10, 10], Sum). -> Sum = 20
@@ -76,6 +91,9 @@
 % Determine all places, states, and zipcodes that are related.
 % getStateInfo(PLACE, STATE, ZIPCODE).
 
+getStateInfo(PLACE, STATE, ZIPCODE) :-
+    location(ZIPCODE, PLACE, STATE, _, _, _).
+
 % getStateInfo('Oxford', State, 45056). -> State = 'OH'
 % findall(State, getStateInfo('Oxford', State, _), StList), writeln(StList).
 % -> StList = [AL,AR,CT,FL,GA,GA,IA,IN,KS,MA,MD,ME,MI,MI,MS,NC,NE,NJ,NY,OH,PA,WI]
@@ -86,6 +104,7 @@
 % ** The order of places is not important
 % ** Duplicate values should be removed 
 % getCommon(STATE1, STATE2, PLACELST).
+
 
 % getCommon('OH','MI',PLACELST). -> *Should be 131 unique places* 
 % ['Manchester','Unionville','Athens','Saint
