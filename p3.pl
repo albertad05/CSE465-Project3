@@ -41,7 +41,16 @@
 % whose sums are equal
 % (the list will always have length >= 1).
 % partitionable(Lst).
- 
+
+% Andrew Albert
+% Only one case required for this problem.
+% Append is used to create every possible sub list in the given list, for each
+% of these sub lists the sums are calculated and checked if they are equal
+partitionable(Lst) :- append(Left, Right, Lst),
+                    sum_lst(Left, LSum),
+                    sum_lst(Right, RSum),
+                    LSum = RSum.
+
 % partitionable([1, 2, 3, 4, 10]). -> true. because of [1, 2, 3, 4] and [10]
 % partitionable([2, 1, 1]). -> true. because of [2] and [1, 2]
 % ------------------------------------------------
@@ -50,12 +59,38 @@
 % determine the reversed list of integers without duplicate values.
 % reverse_unique(Lst, RevLst).
 
+% Andrew Albert
+reverse_unique([],[]). % Base case with an empty list for recursion
+% Case for if there are no other copies of the element in the list. In this case that element is appended
+% after the recursive sub list.
+reverse_unique([First|Rest], RevLst) :- count_occurrences(Rest,First,C), 
+                                        0 is C, !, 
+                                        reverse_unique(Rest, SubLst), 
+                                        append(SubLst, [First], RevLst).
+% Case for if there are copies of the element in the list where the function just moves on
+reverse_unique([_|Rest], RevLst) :- reverse_unique(Rest, RevLst).
+
 % reverse_unique([4, 0, -4, 6, 0], RevLst). -> RevLst = [0, 6, -4, 4]
 % reverse_unique([6, 18, 41, 6, 18, 10, 6], RevLst). -> RevLst = [6, 10, 18, 41]
 % ------------------------------------------------
 % #7 (Undergraduate/Graduate) (10/5 pts)
 % Return a list of numbers that have an even number of digits.
 % collectEvenDigitCount(Lst, NewLst).
+
+% Andrew Albert
+% Helper method to check if the digit count is even. Uses log10 to check digit count
+countDigits(0, 1). % Case for 0
+countDigits(X, Count) :- AbsX is abs(X), Count is floor(log10(AbsX)) + 1.
+
+collectEvenDigitCount([], []). % Base case with an empty list for recursion
+% Even case where the first element of the list has an even number of digits. In this case it is placed
+% at the front of the result list before recursively calling the same function on the rest of the list
+collectEvenDigitCount([First|Rest], [First|Result]) :- countDigits(First, Count),
+                                                    0 is Count mod 2, !,
+                                                    collectEvenDigitCount(Rest, Result).
+% Odd case where the first element of the list has an odd number of digits. In this case it just calls the
+% function on the rest of the list recursively
+collectEvenDigitCount([_|Rest], Result) :- collectEvenDigitCount(Rest, Result).
 
 % collectEvenDigitCount([3, 12, 9999, 123], NewLst). -> NewLst = [12, 9999] 
 % collectEvenDigitCount([22, 3333, 0, 444444], NewLst). -> NewLst = [22, 3333, 444444] 
