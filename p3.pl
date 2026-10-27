@@ -9,14 +9,22 @@
 % Determine the maximum of two integer numbers.
 % max_two(A, B, M).
 
+max_two(A, B, M) :- A >= B, M is A.
+max_two(A, B, M) :- A < B, M is B.
+
 % max_two(1, 12, M). -> M = 12
 % max_two(11232, 92674, M). -> M = 92674
 % ------------------------------------------------
+
+% AJ Marin
 % #2 (Undergraduate/Graduate) (5/5 pts)
 % Using the max_two predicate from the previous problem,
 % determine the maximum value in a list of integers
 % (the list will always have length >= 1).
 % max_lst(Lst, Max).
+
+max_lst([Num], Num).
+max_lst([Num|Rest], Max) :- max_lst(rest, PrevMax), max_two(PrevMax, Num, Max).
 
 % max_lst([1, 2, 3, 4], Max). -> Max = 4
 % max_lst([1, 13, 2], Max). -> Max = 13
@@ -122,6 +130,7 @@ collectEvenDigitCount([_|Rest], Result) :- collectEvenDigitCount(Rest, Result).
 % so you don't have to manually consult the file.
 :- consult('zipcodes.pl').
 
+% Leah Johnston
 % #8 (Undergraduate/Graduate) (3/3 pts)
 % Determine all places, states, and zipcodes that are related.
 % getStateInfo(PLACE, STATE, ZIPCODE).
@@ -132,7 +141,9 @@ getStateInfo(PLACE, STATE, ZIPCODE) :-
 % getStateInfo('Oxford', State, 45056). -> State = 'OH'
 % findall(State, getStateInfo('Oxford', State, _), StList), writeln(StList).
 % -> StList = [AL,AR,CT,FL,GA,GA,IA,IN,KS,MA,MD,ME,MI,MI,MS,NC,NE,NJ,NY,OH,PA,WI]
-% ------------------------------------------------
+% ------------------------------------------------'
+
+% AJ Marin
 % #9 (Undergrad/Grad) (17/7 pts)
 % Gets place names that are common between STATE1 and STATE2, 
 % where STATE1 and STATE2 differ.
@@ -140,6 +151,12 @@ getStateInfo(PLACE, STATE, ZIPCODE) :-
 % ** Duplicate values should be removed 
 % getCommon(STATE1, STATE2, PLACELST).
 
+
+getCommon(State1, State2, Placelst) :-
+        not(State1 = State2),
+        findall(P, getStateInfo(P, State1, _), L1),
+        findall(P, getStateInfo(P, State2, _), L2),
+        intersection(L1, L2, Placelst).
 
 % getCommon('OH','MI',PLACELST). -> *Should be 131 unique places* 
 % ['Manchester','Unionville','Athens','Saint
