@@ -26,7 +26,7 @@ max_two(A, B, M) :- A < B, M is B.
 % max_lst(Lst, Max).
 
 max_lst([Num], Num).
-max_lst([Num|Rest], Max) :- max_lst(rest, PrevMax), max_two(PrevMax, Num, Max).
+max_lst([Num|Rest], Max) :- max_lst(Rest, PrevMax), max_two(PrevMax, Num, Max).
 
 % max_lst([1, 2, 3, 4], Max). -> Max = 4
 % max_lst([1, 13, 2], Max). -> Max = 13
