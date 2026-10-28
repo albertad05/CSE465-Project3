@@ -1,5 +1,5 @@
 % p3.pl
-% Ron Antwi -- #1, #10
+% Ranold Antwi -- #1, #10
 % AJ Marin -- #2, #9
 % Leah Johnston -- #3, #4, #8
 % Andrew Albert -- #5, #6, #7
@@ -9,9 +9,11 @@
 % Determine the maximum of two integer numbers.
 % max_two(A, B, M).
 
+% Ranold Antwi
+% If A is bigger (or equal) then A is the max, otherwise B is.
 max_two(A, B, M) :- A >= B, M is A.
 max_two(A, B, M) :- A < B, M is B.
-
+ 
 % max_two(1, 12, M). -> M = 12
 % max_two(11232, 92674, M). -> M = 92674
 % ------------------------------------------------
@@ -208,4 +210,33 @@ distance_km(Lat1, Lon1, Lat2, Lon2, D) :-
     D is R * C.
 
 deg2rad(Deg, Rad) :-
-    Rad is Deg * pi / 180.
+    Rad is Deg * pi / 180. 
+% Ranold Antwi
+% Picks the pair with the smaller distance. Pairs look like [Distance, Place].
+% Same idea as max_two but for the smaller one.
+smaller_pair([D1, P1], [D2, _], [D1, P1]) :- D1 =< D2.
+smaller_pair([D1, _], [D2, P2], [D2, P2]) :- D1 > D2.
+ 
+% Goes through the list of pairs and finds the one with the smallest distance.
+% Works like max_lst but with smaller_pair.
+closest_pair([Pair], Pair).
+closest_pair([Pair|Rest], Best) :-
+    closest_pair(Rest, RestBest),
+    smaller_pair(Pair, RestBest, Best).
+ 
+% First get the lat and long of the place we start from (cut so we only use
+% the first zipcode if the place has more than one).
+% Then make a list of [Distance, OtherPlace] for every other place in the state.
+% Then find the pair with the smallest distance and return its place.
+closestPlaceInState(Place, State, ClosestPlace) :-
+    location(_, Place, State, _, Lat1, Lon1), !,
+    findall([D, P],
+            (location(_, P, State, _, Lat2, Lon2),
+             P \= Place,
+             distance_km(Lat1, Lon1, Lat2, Lon2, D)),
+            Pairs),
+    closest_pair(Pairs, [_, ClosestPlace]).
+ 
+% closestPlaceInState('Oxford', 'OH', ClosestPlace). -> ClosestPlace = 'Hamilton'
+% closestPlaceInState('Oxford', 'MI', ClosestPlace). -> ClosestPlace = 'Lakeville'
+ 
